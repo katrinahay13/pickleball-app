@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pickleball 8-Player Mixer</title>
+  <style>
+    :root {
+      --bg: #f7f9fc;
+      --card: #ffffff;
+      --text: #1a2433;
+      --muted: #5f6f85;
+      --line: #d7deea;
+      --accent: #006d77;
+      --accent-2: #83c5be;
+      --danger: #c62828;
+      --ok: #2e7d32;
+      --radius: 14px;
+      --shadow: 0 8px 24px rgba(19, 35, 60, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, #d6f2ef 0, transparent 35%),
+        radial-gradient(circle at bottom left, #e3ecff 0, transparent 40%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    .app {
+      width: min(1100px, 96vw);
+      margin: 20px auto 32px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    h1, h2 {
+      margin: 0 0 12px;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(1.25rem, 2.6vw, 1.9rem);
+    }
+
+    h2 {
+      font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+    }
+
+    .sub {
+      color: var(--muted);
+      margin: 0 0 12px;
+      font-size: 0.94rem;
+    }
+
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .players-grid input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background: #fff;
+    }
+
+    .controls {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #50627b;
+    }
+
+    button.ghost {
+      background: #e9eef7;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .status.err {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .status.ok {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    .schedule {
+      display: grid;
+      gap: 10px;
+    }
+
+    .match {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      background: #fcfdff;
+      display: grid;
+      gap: 8px;
+    }
+
+    .match-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .teams {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .vs {
+      color: var(--muted);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .scores {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scores input {
+      width: 100%;
+      min-width: 58px;
+      text-align: center;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.96rem;
+      background: #fff;
+    }
+
+    .rank-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 7px 6px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    td.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 850px) {
+      .players-grid {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+
+      .rank-wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .app {
+        width: min(100vw, 100%);
+        margin: 0;
+        padding: 10px;
+      }
+
+      .card {
+        border-radius: 12px;
+        padding: 12px;
+      }
+
+      .teams, .scores {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        text-align: center;
+      }
+
+      .vs {
+        display: none;
+      }
+
+      th, td {
+        font-size: 0.86rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="card">
+      <h1>8-Player Pickleball Round-Robin Mixer</h1>
+      <p class="sub">Enter 8 players, generate a fair 7-round doubles mixer, add match scores, and track standings offline.</p>
+
+      <div class="players-grid" id="playerInputs"></div>
+
+      <div class="controls">
+        <label><input type="checkbox" id="randomizeNames" checked /> Randomize player positions each generation</label>
+      </div>
+
+      <div class="controls">
+        <button id="generateBtn">Generate 7-Round Schedule</button>
+        <button id="clearScoresBtn" class="secondary">Clear Scores</button>
+        <button id="resetAllBtn" class="ghost">Reset Everything</button>
+      </div>
+
+      <div class="status" id="status"></div>
+    </section>
+
+    <section class="card">
+      <h2>Schedule (2 Courts x 7 Rounds)</h2>
+      <div class="schedule" id="schedule"></div>
+    </section>
+
+    <section class="card">
+      <h2>Final Rankings</h2>
+      <div class="rank-wrap">
+        <div>
+          <h3>Ranked by Wins</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Player</th><th class="num">W</th><th class="num">PF</th><th class="num">PA</th><th class="num">Diff</th>
+              </tr>
+            </thead>
+            <tbody id="winsTable"></tbody>
+          </table>
+        </div>
+
+        <div>
+          <h3>Ranked by Points</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Player</th><th class="num">PF</th><th class="num">PA</th><th class="num">Diff</th><th class="num">W</th>
+              </tr>
+            </thead>
+            <tbody id="pointsTable"></tbody>
+          </table>
+        </div>
+      </div>
+      <p class="footer-note">Ranking ties are broken by differential, then points for (wins table) or wins (points table).</p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "pickleball_mixer_8p_v1";
+      const PLAYER_COUNT = 8;
+
+      // Fixed fair doubles pattern for 8 players (indices 0-7).
+      const TEMPLATE = [
+        // Round 1
+        [[0, 1], [2, 3], [4, 5], [6, 7]],
+        // Round 2
+        [[0, 2], [4, 6], [1, 3], [5, 7]],
+        // Round 3
+        [[0, 3], [5, 6], [1, 2], [4, 7]],
+        // Round 4
+        [[0, 4], [1, 5], [2, 6], [3, 7]],
+        // Round 5
+        [[0, 5], [2, 7], [1, 4], [3, 6]],
+        // Round 6
+        [[0, 6], [3, 5], [1, 7], [2, 4]],
+        // Round 7
+        [[0, 7], [1, 6], [2, 5], [3, 4]]
+      ];
+
+      const els = {
+        playerInputs: document.getElementById("playerInputs"),
+        randomizeNames: document.getElementById("randomizeNames"),
+        generateBtn: document.getElementById("generateBtn"),
+        clearScoresBtn: document.getElementById("clearScoresBtn"),
+        resetAllBtn: document.getElementById("resetAllBtn"),
+        schedule: document.getElementById("schedule"),
+        winsTable: document.getElementById("winsTable"),
+        pointsTable: document.getElementById("pointsTable"),
+        status: document.getElementById("status")
+      };
+
+      const state = {
+        names: Array.from({ length: PLAYER_COUNT }, (_, i) => `Player ${i + 1}`),
+        schedule: [],
+        scores: {}
+      };
+
+      function initInputs() {
+        els.playerInputs.innerHTML = "";
+        for (let i = 0; i < PLAYER_COUNT; i += 1) {
+          const input = document.createElement("input");
+          input.type = "text";
+          input.placeholder = `Player ${i + 1}`;
+          input.value = state.names[i] || "";
+          input.dataset.index = String(i);
+          input.addEventListener("input", (e) => {
+            state.names[i] = e.target.value;
+            persist();
+            renderRankings();
+            rerenderScheduleNamesOnly();
+          });
+          els.playerInputs.appendChild(input);
+        }
+      }
+
+      function setStatus(message, type) {
+        els.status.textContent = message || "";
+        els.status.className = "status" + (type ? ` ${type}` : "");
+      }
+
+      function shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
+
+      function normalizeNames() {
+        const trimmed = state.names.map((n, i) => {
+          const val = (n || "").trim();
+          return val || `Player ${i + 1}`;
+        });
+
+        if (trimmed.length !== PLAYER_COUNT) return null;
+
+        const uniq = new Set(trimmed.map((n) => n.toLowerCase()));
+        if (uniq.size !== PLAYER_COUNT) {
+          setStatus("Player names must be unique (case-insensitive).", "err");
+          return null;
+        }
+
+        state.names = trimmed;
+        return trimmed;
+      }
+
+      function buildSchedule() {
+        const names = normalizeNames();
+        if (!names) return;
+
+        const mapping = els.randomizeNames.checked
+          ? shuffle([...Array(PLAYER_COUNT).keys()])
+          : [...Array(PLAYER_COUNT).keys()];
+
+        const schedule = [];
+        let idCounter = 1;
+
+        TEMPLATE.forEach((round, rIndex) => {
+          for (let court = 0; court < 2; court += 1) {
+            const pairA = round[court * 2];
+            const pairB = round[court * 2 + 1];
+            schedule.push({
+              id: `m${idCounter++}`,
+              round: rIndex + 1,
+              court: court + 1,
+              teamA: [mapping[pairA[0]], mapping[pairA[1]]],
+              teamB: [mapping[pairB[0]], mapping[pairB[1]]]
+            });
+          }
+        });
+
+        state.schedule = schedule;
+        state.scores = {};
+        persist();
+        renderSchedule();
+        renderRankings();
+        setStatus("Schedule generated. Enter scores as points for each team.", "ok");
+      }
+
+      function createScoreInput(matchId, side, value) {
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = "0";
+        input.step = "1";
+        input.inputMode = "numeric";
+        input.placeholder = side === "a" ? "Team A pts" : "Team B pts";
+        input.value = Number.isFinite(value) ? value : "";
+        input.dataset.matchId = matchId;
+        input.dataset.side = side;
+        input.addEventListener("input", onScoreInput);
+        return input;
+      }
+
+      function onScoreInput(e) {
+        const matchId = e.target.dataset.matchId;
+        const side = e.target.dataset.side;
+        const raw = e.target.value;
+
+        if (!state.scores[matchId]) state.scores[matchId] = { a: null, b: null };
+
+        if (raw === "") {
+          state.scores[matchId][side] = null;
+        } else {
+          const parsed = parseInt(raw, 10);
+          state.scores[matchId][side] = Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+        }
+
+        if (state.scores[matchId].a == null && state.scores[matchId].b == null) {
+          delete state.scores[matchId];
+        }
+
+        persist();
+        renderRankings();
+      }
+
+      function teamLabel(ids) {
+        return `${state.names[ids[0]]} & ${state.names[ids[1]]}`;
+      }
+
+      function renderSchedule() {
+        els.schedule.innerHTML = "";
+
+        if (!state.schedule.length) {
+          const empty = document.createElement("p");
+          empty.className = "sub";
+          empty.textContent = "No schedule yet. Enter names and click Generate 7-Round Schedule.";
+          els.schedule.appendChild(empty);
+          return;
+        }
+
+        state.schedule.forEach((match) => {
+          const box = document.createElement("article");
+          box.className = "match";
+
+          const head = document.createElement("div");
+          head.className = "match-head";
+          head.innerHTML = `<strong>Round ${match.round}</strong><span>Court ${match.court}</span>`;
+
+          const teams = document.createElement("div");
+          teams.className = "teams";
+          teams.innerHTML = `<div>${teamLabel(match.teamA)}</div><div class="vs">vs</div><div>${teamLabel(match.teamB)}</div>`;
+
+          const scoreWrap = document.createElement("div");
+          scoreWrap.className = "scores";
+          const saved = state.scores[match.id] || { a: null, b: null };
+          scoreWrap.appendChild(createScoreInput(match.id, "a", saved.a));
+
+          const dash = document.createElement("div");
+          dash.className = "vs";
+          dash.textContent = "-";
+          scoreWrap.appendChild(dash);
+
+          scoreWrap.appendChild(createScoreInput(match.id, "b", saved.b));
+
+          box.append(head, teams, scoreWrap);
+          els.schedule.appendChild(box);
+        });
+      }
+
+      function rerenderScheduleNamesOnly() {
+        if (!state.schedule.length) return;
+        const matchCards = els.schedule.querySelectorAll(".match");
+        matchCards.forEach((card, index) => {
+          const match = state.schedule[index];
+          const teams = card.querySelector(".teams");
+          if (teams) {
+            teams.innerHTML = `<div>${teamLabel(match.teamA)}</div><div class="vs">vs</div><div>${teamLabel(match.teamB)}</div>`;
+          }
+        });
+      }
+
+      function computeStats() {
+        const stats = state.names.map((name, idx) => ({
+          idx,
+          name,
+          wins: 0,
+          pf: 0,
+          pa: 0,
+          diff: 0
+        }));
+
+        state.schedule.forEach((match) => {
+          const score = state.scores[match.id];
+          if (!score) return;
+          if (!Number.isFinite(score.a) || !Number.isFinite(score.b)) return;
+
+          match.teamA.forEach((pid) => {
+            stats[pid].pf += score.a;
+            stats[pid].pa += score.b;
+          });
+
+          match.teamB.forEach((pid) => {
+            stats[pid].pf += score.b;
+            stats[pid].pa += score.a;
+          });
+
+          if (score.a > score.b) {
+            match.teamA.forEach((pid) => { stats[pid].wins += 1; });
+          } else if (score.b > score.a) {
+            match.teamB.forEach((pid) => { stats[pid].wins += 1; });
+          }
+        });
+
+        stats.forEach((s) => {
+          s.diff = s.pf - s.pa;
+        });
+
+        return stats;
+      }
+
+      function renderTable(tbody, rows, cols) {
+        tbody.innerHTML = "";
+        rows.forEach((row, i) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = cols
+            .map((c) => {
+              const value = c === "rank" ? i + 1 : row[c];
+              const numClass = typeof value === "number" ? "num" : "";
+              return `<td class="${numClass}">${value}</td>`;
+            })
+            .join("");
+          tbody.appendChild(tr);
+        });
+      }
+
+      function renderRankings() {
+        const stats = computeStats();
+
+        const byWins = stats.slice().sort((a, b) =>
+          b.wins - a.wins || b.diff - a.diff || b.pf - a.pf || a.name.localeCompare(b.name)
+        );
+
+        const byPoints = stats.slice().sort((a, b) =>
+          b.pf - a.pf || b.diff - a.diff || b.wins - a.wins || a.name.localeCompare(b.name)
+        );
+
+        renderTable(els.winsTable, byWins, ["rank", "name", "wins", "pf", "pa", "diff"]);
+        renderTable(els.pointsTable, byPoints, ["rank", "name", "pf", "pa", "diff", "wins"]);
+      }
+
+      function clearScores() {
+        state.scores = {};
+        persist();
+        renderSchedule();
+        renderRankings();
+        setStatus("All scores cleared.", "ok");
+      }
+
+      function resetAll() {
+        state.names = Array.from({ length: PLAYER_COUNT }, (_, i) => `Player ${i + 1}`);
+        state.schedule = [];
+        state.scores = {};
+        persist();
+        initInputs();
+        renderSchedule();
+        renderRankings();
+        setStatus("Reset complete.", "ok");
+      }
+
+      function persist() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          names: state.names,
+          schedule: state.schedule,
+          scores: state.scores,
+          randomize: els.randomizeNames.checked
+        }));
+      }
+
+      function restore() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const saved = JSON.parse(raw);
+          if (Array.isArray(saved.names) && saved.names.length === PLAYER_COUNT) {
+            state.names = saved.names;
+          }
+          if (Array.isArray(saved.schedule)) {
+            state.schedule = saved.schedule;
+          }
+          if (saved.scores && typeof saved.scores === "object") {
+            state.scores = saved.scores;
+          }
+          if (typeof saved.randomize === "boolean") {
+            els.randomizeNames.checked = saved.randomize;
+          }
+        } catch (err) {
+          console.warn("Could not restore from localStorage", err);
+        }
+      }
+
+      function wire() {
+        els.generateBtn.addEventListener("click", buildSchedule);
+        els.clearScoresBtn.addEventListener("click", clearScores);
+        els.resetAllBtn.addEventListener("click", resetAll);
+        els.randomizeNames.addEventListener("change", persist);
+      }
+
+      restore();
+      initInputs();
+      wire();
+      renderSchedule();
+      renderRankings();
+      setStatus(state.schedule.length ? "Loaded saved schedule from this browser." : "");
+    })();
+  </script>
+</body>
+</html>
