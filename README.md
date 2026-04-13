@@ -1,2 +1,2 @@
 # pickleball-app
-2 Court PB Round Robin
+6 Court Mixed Doubles PB Round Robin
