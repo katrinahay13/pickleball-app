@@ -5,293 +5,125 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>6-Court Mixed Doubles Round Robin</title>
 
-  <meta name="theme-color" content="#f7c948" />
+  <meta name="theme-color" content="#2e7d32" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="6-Court Mixed Doubles Round Robin">
+  <meta name="apple-mobile-web-app-title" content="6-Court Mixed Doubles">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/svg+xml" href="icon.svg">
-  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="icon" type="image/png" href="icon-512.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
   <style>
-    :root{
+    :root {
       --bg:#fff7d6;
-      --card:#ffffff;
-      --card2:#fffdf5;
-      --line:#ecdca6;
-      --text:#243447;
-      --muted:#66758a;
-      --accent:#ef8354;
-      --accent-dark:#dc6f41;
-      --soft:#6c757d;
+      --bg2:#fffdf4;
+      --green:#2e7d32;
+      --green2:#3f9c45;
       --yellow:#f7c948;
-      --teal:#2a9d8f;
-      --shadow:0 8px 24px rgba(0,0,0,.08);
-      --radius:18px;
+      --yellow2:#f3b91d;
+      --accent:#ef8354;
+      --accent2:#6f7780;
+      --text:#213547;
+      --muted:#5f6f80;
+      --line:#e7d79b;
+      --card:#ffffffee;
+      --shadow:0 10px 28px rgba(0,0,0,.08);
+      --radius:20px;
     }
-
     * { box-sizing:border-box; }
-    body{
+    body {
       margin:0;
       font-family:Arial, Helvetica, sans-serif;
       color:var(--text);
-      background:
-        radial-gradient(circle at top left, #fffbe7 0%, #fff2bf 32%, #fff7d6 60%, #fffaf0 100%);
+      background: radial-gradient(circle at top left, #fffbe7 0%, #fff0b8 30%, #fff7d6 62%, #fffaf0 100%);
     }
-
-    .wrap{
-      max-width:1220px;
-      margin:0 auto;
-      padding:18px 14px 40px;
-    }
-
-    .hero{
-      background:linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,248,214,.88));
+    .wrap { max-width:1260px; margin:0 auto; padding:18px 14px 42px; }
+    .hero {
+      background:linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,248,214,.88));
       border:1px solid var(--line);
-      border-radius:24px;
+      border-radius:26px;
       box-shadow:var(--shadow);
       padding:20px;
       position:relative;
       overflow:hidden;
     }
-
-    .hero:after{
+    .hero::after {
       content:"";
       position:absolute;
-      right:-30px;
-      top:-25px;
-      width:130px;
-      height:130px;
-      border-radius:50%;
-      background:radial-gradient(circle at 35% 35%, #fff7b5 0%, #f7c948 58%, #e9b42a 100%);
-      opacity:.7;
+      right:-28px; top:-26px;
+      width:132px; height:132px; border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #fff8b8 0%, var(--yellow) 58%, var(--yellow2) 100%);
+      box-shadow: inset 0 0 0 10px rgba(255,255,255,.12);
+      opacity:.9;
     }
-
-    h1{
-      margin:0 0 8px;
-      font-size:clamp(1.7rem, 3vw, 2.4rem);
-      line-height:1.06;
-      position:relative;
-      z-index:1;
-    }
-
-    .sub{
-      margin:0;
-      color:var(--muted);
-      line-height:1.5;
-      max-width:840px;
-      position:relative;
-      z-index:1;
-    }
-
-    .pill-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:14px;
-      position:relative;
-      z-index:1;
-    }
-
-    .pill{
+    h1 { margin:0 0 8px; font-size:clamp(1.7rem, 3vw, 2.45rem); line-height:1.05; position:relative; z-index:1; }
+    .sub { margin:0; max-width:860px; color:var(--muted); line-height:1.52; position:relative; z-index:1; }
+    .pill-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; position:relative; z-index:1; }
+    .pill {
+      background:rgba(255,255,255,.88);
       border:1px solid var(--line);
-      background:rgba(255,255,255,.85);
       border-radius:999px;
       padding:9px 13px;
       font-size:.93rem;
-      font-weight:700;
+      font-weight:800;
     }
-
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-      margin-top:16px;
-    }
-
-    .card{
-      background:rgba(255,255,255,.92);
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+    .card {
+      background:var(--card);
       border:1px solid var(--line);
       border-radius:22px;
       box-shadow:var(--shadow);
       padding:16px;
     }
-
-    h2, h3{
-      margin:0 0 12px;
-    }
-
-    .inputs{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
-    .player-field{
-      display:flex;
-      flex-direction:column;
-      gap:5px;
-    }
-
-    .player-field label{
-      font-size:.86rem;
-      color:var(--muted);
-      font-weight:700;
-    }
-
-    input{
+    h2,h3 { margin:0 0 12px; }
+    .inputs { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .player-field { display:flex; flex-direction:column; gap:5px; }
+    .player-field label { font-size:.86rem; color:var(--muted); font-weight:700; }
+    input {
       width:100%;
       padding:11px 12px;
-      border:1px solid #d8d8d8;
+      border:1px solid #d9d9d9;
       border-radius:12px;
       font:inherit;
       background:#fff;
     }
-
-    .controls{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      align-items:center;
-      margin-top:16px;
+    .controls { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:16px; }
+    select {
+      padding:12px 14px; border-radius:12px; border:1px solid #d9d9d9; background:#fff; font:inherit; min-width:250px;
     }
-
-    select{
-      padding:12px 14px;
-      border-radius:12px;
-      border:1px solid #d8d8d8;
-      background:#fff;
-      font:inherit;
-      min-width:240px;
-    }
-
-    button{
-      padding:12px 16px;
-      border:none;
-      border-radius:12px;
-      background:linear-gradient(135deg, var(--accent), var(--accent-dark));
-      color:#fff;
-      font-weight:800;
-      cursor:pointer;
+    button {
+      padding:12px 16px; border:none; border-radius:12px;
+      background:linear-gradient(135deg, var(--accent), #d96e43);
+      color:#fff; font-weight:800; cursor:pointer;
       box-shadow:0 8px 18px rgba(239,131,84,.24);
     }
-
-    button.secondary{
-      background:linear-gradient(135deg, #7c8791, #626d76);
-      box-shadow:none;
-    }
-
-    .note{
-      color:var(--muted);
-      font-size:.95rem;
-      line-height:1.5;
-      margin-top:12px;
-    }
-
-    .summary{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));
-      gap:12px;
-      margin-top:16px;
-    }
-
-    .summary-box{
-      background:rgba(255,255,255,.9);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:13px;
-    }
-
-    .summary-box strong{
-      display:block;
-      margin-bottom:4px;
-    }
-
-    .round{
-      margin-top:18px;
-    }
-
-    .round-title{
-      margin:0 0 10px;
-      font-size:1.15rem;
-    }
-
-    .court-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(310px, 1fr));
-      gap:14px;
-    }
-
-    .court-card{
-      background:var(--card2);
-      border:1px solid var(--line);
-      border-radius:20px;
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-
-    .court-head{
-      padding:11px 14px;
-      font-weight:800;
-      background:linear-gradient(135deg, rgba(247,201,72,.34), rgba(42,157,143,.10));
-      border-bottom:1px solid var(--line);
-    }
-
-    .court{
+    button.secondary { background:linear-gradient(135deg, #7f8993, #646d76); box-shadow:none; }
+    .note { color:var(--muted); font-size:.95rem; line-height:1.5; margin-top:12px; }
+    .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-top:16px; }
+    .summary-box { background:#fff; border:1px solid var(--line); border-radius:16px; padding:13px; }
+    .summary-box strong { display:block; margin-bottom:4px; }
+    .round { margin-top:18px; }
+    .round-title { margin:0 0 10px; font-size:1.15rem; }
+    .court-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(312px,1fr)); gap:14px; }
+    .court-card { background:var(--bg2); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); overflow:hidden; }
+    .court-head { padding:11px 14px; font-weight:800; background:linear-gradient(135deg, rgba(247,201,72,.34), rgba(46,125,50,.12)); border-bottom:1px solid var(--line); }
+    .court {
       display:grid;
       grid-template-columns:1fr 18px 1fr;
-      align-items:stretch;
-      min-height:126px;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,.84) 0%, rgba(255,255,255,.84) 49%, rgba(230, 214, 165, .7) 49%, rgba(230, 214, 165, .7) 51%, rgba(255,255,255,.84) 51%, rgba(255,255,255,.84) 100%);
+      min-height:128px;
+      background:linear-gradient(90deg, rgba(255,255,255,.86) 0%, rgba(255,255,255,.86) 49%, rgba(231,215,155,.8) 49%, rgba(231,215,155,.8) 51%, rgba(255,255,255,.86) 51%, rgba(255,255,255,.86) 100%);
     }
-
-    .side{
-      padding:14px 14px 12px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:8px;
-    }
-
-    .side-label{
-      font-size:.84rem;
-      color:var(--muted);
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:.04em;
-    }
-
-    .team-line{
-      font-weight:800;
-      line-height:1.3;
-    }
-
-    .net{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#8a7e58;
-      font-weight:800;
-      font-size:.9rem;
-    }
-
-    .error{
-      margin-top:16px;
-      background:#fff0ef;
-      border:1px solid #efc0bb;
-      color:#8b2a21;
-      border-radius:16px;
-      padding:14px;
-      font-weight:700;
-    }
-
-    @media (max-width: 860px){
-      .grid{ grid-template-columns:1fr; }
-      .inputs{ grid-template-columns:1fr; }
-      .court-grid{ grid-template-columns:1fr; }
-      .controls{ align-items:stretch; }
-      select, button{ width:100%; }
+    .side { padding:14px 14px 12px; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+    .side-label { font-size:.83rem; color:var(--muted); font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
+    .team-line { font-weight:800; line-height:1.3; }
+    .net { display:flex; align-items:center; justify-content:center; color:#8f8152; font-weight:900; }
+    .error { margin-top:16px; background:#fff0ef; border:1px solid #efc0bb; color:#8b2a21; border-radius:16px; padding:14px; font-weight:700; }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns:1fr; }
+      .inputs { grid-template-columns:1fr; }
+      .court-grid { grid-template-columns:1fr; }
+      .controls { align-items:stretch; }
+      select, button { width:100%; }
     }
   </style>
 </head>
@@ -302,14 +134,14 @@
       <p class="sub">
         Enter 12 men and 12 women, then choose one of the two fixed schedule options.
         Teams are always one man and one woman versus one man and one woman.
-        The first 8–10 rounds are the priority window for balance, while still keeping 12-round capability.
+        These two options were built to maximize interaction variety and keep the opponent repeat cap at 2.
       </p>
       <div class="pill-row">
         <div class="pill">24 players</div>
         <div class="pill">6 courts</div>
         <div class="pill">Mixed doubles only</div>
         <div class="pill">2 fixed options</div>
-        <div class="pill">Easy court-by-court display</div>
+        <div class="pill">Max opponent repeat = 2</div>
       </div>
     </section>
 
@@ -318,7 +150,6 @@
         <h2>Men</h2>
         <div id="menInputs" class="inputs"></div>
       </section>
-
       <section class="card">
         <h2>Women</h2>
         <div id="womenInputs" class="inputs"></div>
@@ -335,7 +166,7 @@
         <button onclick="clearNames()" class="secondary">Clear Player Names</button>
       </div>
       <div class="note">
-        These are two fixed schedule patterns. They are designed to stay readable and reasonably balanced if your group stops after 8, 9, or 10 rounds, while still allowing all 12 rounds.
+        These are fixed schedules, not random generation. Both options keep the maximum number of times any player faces any specific other player to 2.
       </div>
     </section>
 
@@ -343,6 +174,8 @@
   </div>
 
   <script>
+    const OPTIONS = {"option1": {"rounds": [{"round": 1, "matches": [{"court": 1, "sourceRound": 6, "leftMan": 3, "leftWoman": 8, "rightMan": 12, "rightWoman": 5}, {"court": 2, "sourceRound": 6, "leftMan": 5, "leftWoman": 10, "rightMan": 10, "rightWoman": 3}, {"court": 3, "sourceRound": 6, "leftMan": 6, "leftWoman": 11, "rightMan": 11, "rightWoman": 4}, {"court": 4, "sourceRound": 6, "leftMan": 4, "leftWoman": 9, "rightMan": 9, "rightWoman": 2}, {"court": 5, "sourceRound": 6, "leftMan": 2, "leftWoman": 7, "rightMan": 7, "rightWoman": 12}, {"court": 6, "sourceRound": 6, "leftMan": 1, "leftWoman": 6, "rightMan": 8, "rightWoman": 1}]}, {"round": 2, "matches": [{"court": 1, "sourceRound": 2, "leftMan": 9, "leftWoman": 10, "rightMan": 6, "rightWoman": 7}, {"court": 2, "sourceRound": 2, "leftMan": 3, "leftWoman": 4, "rightMan": 8, "rightWoman": 9}, {"court": 3, "sourceRound": 2, "leftMan": 7, "leftWoman": 8, "rightMan": 5, "rightWoman": 6}, {"court": 4, "sourceRound": 2, "leftMan": 11, "leftWoman": 12, "rightMan": 12, "rightWoman": 1}, {"court": 5, "sourceRound": 2, "leftMan": 1, "leftWoman": 2, "rightMan": 10, "rightWoman": 11}, {"court": 6, "sourceRound": 2, "leftMan": 2, "leftWoman": 3, "rightMan": 4, "rightWoman": 5}]}, {"round": 3, "matches": [{"court": 1, "sourceRound": 10, "leftMan": 4, "leftWoman": 1, "rightMan": 7, "rightWoman": 4}, {"court": 2, "sourceRound": 10, "leftMan": 9, "leftWoman": 6, "rightMan": 2, "rightWoman": 11}, {"court": 3, "sourceRound": 10, "leftMan": 12, "leftWoman": 9, "rightMan": 1, "rightWoman": 10}, {"court": 4, "sourceRound": 10, "leftMan": 8, "leftWoman": 5, "rightMan": 5, "rightWoman": 2}, {"court": 5, "sourceRound": 10, "leftMan": 6, "leftWoman": 3, "rightMan": 3, "rightWoman": 12}, {"court": 6, "sourceRound": 10, "leftMan": 10, "leftWoman": 7, "rightMan": 11, "rightWoman": 8}]}, {"round": 4, "matches": [{"court": 1, "sourceRound": 8, "leftMan": 6, "leftWoman": 1, "rightMan": 2, "rightWoman": 9}, {"court": 2, "sourceRound": 8, "leftMan": 7, "leftWoman": 2, "rightMan": 1, "rightWoman": 8}, {"court": 3, "sourceRound": 8, "leftMan": 8, "leftWoman": 3, "rightMan": 12, "rightWoman": 7}, {"court": 4, "sourceRound": 8, "leftMan": 11, "leftWoman": 6, "rightMan": 3, "rightWoman": 10}, {"court": 5, "sourceRound": 8, "leftMan": 10, "leftWoman": 5, "rightMan": 9, "rightWoman": 4}, {"court": 6, "sourceRound": 8, "leftMan": 5, "leftWoman": 12, "rightMan": 4, "rightWoman": 11}]}, {"round": 5, "matches": [{"court": 1, "sourceRound": 5, "leftMan": 10, "leftWoman": 2, "rightMan": 11, "rightWoman": 3}, {"court": 2, "sourceRound": 5, "leftMan": 3, "leftWoman": 7, "rightMan": 4, "rightWoman": 8}, {"court": 3, "sourceRound": 5, "leftMan": 1, "leftWoman": 5, "rightMan": 9, "rightWoman": 1}, {"court": 4, "sourceRound": 5, "leftMan": 12, "leftWoman": 4, "rightMan": 7, "rightWoman": 11}, {"court": 5, "sourceRound": 5, "leftMan": 5, "leftWoman": 9, "rightMan": 2, "rightWoman": 6}, {"court": 6, "sourceRound": 5, "leftMan": 8, "leftWoman": 12, "rightMan": 6, "rightWoman": 10}]}, {"round": 6, "matches": [{"court": 1, "sourceRound": 3, "leftMan": 9, "leftWoman": 11, "rightMan": 5, "rightWoman": 7}, {"court": 2, "sourceRound": 3, "leftMan": 11, "leftWoman": 1, "rightMan": 4, "rightWoman": 6}, {"court": 3, "sourceRound": 3, "leftMan": 3, "leftWoman": 5, "rightMan": 10, "rightWoman": 12}, {"court": 4, "sourceRound": 3, "leftMan": 6, "leftWoman": 8, "rightMan": 1, "rightWoman": 3}, {"court": 5, "sourceRound": 3, "leftMan": 7, "leftWoman": 9, "rightMan": 8, "rightWoman": 10}, {"court": 6, "sourceRound": 3, "leftMan": 2, "leftWoman": 4, "rightMan": 12, "rightWoman": 2}]}, {"round": 7, "matches": [{"court": 1, "sourceRound": 12, "leftMan": 1, "leftWoman": 12, "rightMan": 5, "rightWoman": 4}, {"court": 2, "sourceRound": 12, "leftMan": 12, "leftWoman": 11, "rightMan": 6, "rightWoman": 5}, {"court": 3, "sourceRound": 12, "leftMan": 4, "leftWoman": 3, "rightMan": 10, "rightWoman": 9}, {"court": 4, "sourceRound": 12, "leftMan": 2, "leftWoman": 1, "rightMan": 8, "rightWoman": 7}, {"court": 5, "sourceRound": 12, "leftMan": 11, "leftWoman": 10, "rightMan": 9, "rightWoman": 8}, {"court": 6, "sourceRound": 12, "leftMan": 7, "leftWoman": 6, "rightMan": 3, "rightWoman": 2}]}, {"round": 8, "matches": [{"court": 1, "sourceRound": 9, "leftMan": 4, "leftWoman": 12, "rightMan": 7, "rightWoman": 3}, {"court": 2, "sourceRound": 9, "leftMan": 8, "leftWoman": 4, "rightMan": 9, "rightWoman": 5}, {"court": 3, "sourceRound": 9, "leftMan": 2, "leftWoman": 10, "rightMan": 3, "rightWoman": 11}, {"court": 4, "sourceRound": 9, "leftMan": 6, "leftWoman": 2, "rightMan": 10, "rightWoman": 6}, {"court": 5, "sourceRound": 9, "leftMan": 12, "leftWoman": 8, "rightMan": 5, "rightWoman": 1}, {"court": 6, "sourceRound": 9, "leftMan": 11, "leftWoman": 7, "rightMan": 1, "rightWoman": 9}]}, {"round": 9, "matches": [{"court": 1, "sourceRound": 7, "leftMan": 10, "leftWoman": 4, "rightMan": 2, "rightWoman": 8}, {"court": 2, "sourceRound": 7, "leftMan": 1, "leftWoman": 7, "rightMan": 12, "rightWoman": 6}, {"court": 3, "sourceRound": 7, "leftMan": 8, "leftWoman": 2, "rightMan": 6, "rightWoman": 12}, {"court": 4, "sourceRound": 7, "leftMan": 5, "leftWoman": 11, "rightMan": 3, "rightWoman": 9}, {"court": 5, "sourceRound": 7, "leftMan": 4, "leftWoman": 10, "rightMan": 11, "rightWoman": 5}, {"court": 6, "sourceRound": 7, "leftMan": 9, "leftWoman": 3, "rightMan": 7, "rightWoman": 1}]}, {"round": 10, "matches": [{"court": 1, "sourceRound": 1, "leftMan": 8, "leftWoman": 8, "rightMan": 11, "rightWoman": 11}, {"court": 2, "sourceRound": 1, "leftMan": 3, "leftWoman": 3, "rightMan": 2, "rightWoman": 2}, {"court": 3, "sourceRound": 1, "leftMan": 5, "leftWoman": 5, "rightMan": 7, "rightWoman": 7}, {"court": 4, "sourceRound": 1, "leftMan": 1, "leftWoman": 1, "rightMan": 10, "rightWoman": 10}, {"court": 5, "sourceRound": 1, "leftMan": 6, "leftWoman": 6, "rightMan": 4, "rightWoman": 4}, {"court": 6, "sourceRound": 1, "leftMan": 9, "leftWoman": 9, "rightMan": 12, "rightWoman": 12}]}, {"round": 11, "matches": [{"court": 1, "sourceRound": 11, "leftMan": 12, "leftWoman": 10, "rightMan": 4, "rightWoman": 2}, {"court": 2, "sourceRound": 11, "leftMan": 7, "leftWoman": 5, "rightMan": 11, "rightWoman": 9}, {"court": 3, "sourceRound": 11, "leftMan": 10, "leftWoman": 8, "rightMan": 8, "rightWoman": 6}, {"court": 4, "sourceRound": 11, "leftMan": 1, "leftWoman": 11, "rightMan": 2, "rightWoman": 12}, {"court": 5, "sourceRound": 11, "leftMan": 3, "leftWoman": 1, "rightMan": 9, "rightWoman": 7}, {"court": 6, "sourceRound": 11, "leftMan": 5, "leftWoman": 3, "rightMan": 6, "rightWoman": 4}]}, {"round": 12, "matches": [{"court": 1, "sourceRound": 4, "leftMan": 3, "leftWoman": 6, "rightMan": 12, "rightWoman": 3}, {"court": 2, "sourceRound": 4, "leftMan": 6, "leftWoman": 9, "rightMan": 5, "rightWoman": 8}, {"court": 3, "sourceRound": 4, "leftMan": 9, "leftWoman": 12, "rightMan": 11, "rightWoman": 2}, {"court": 4, "sourceRound": 4, "leftMan": 4, "leftWoman": 7, "rightMan": 1, "rightWoman": 4}, {"court": 5, "sourceRound": 4, "leftMan": 8, "leftWoman": 11, "rightMan": 10, "rightWoman": 1}, {"court": 6, "sourceRound": 4, "leftMan": 2, "leftWoman": 5, "rightMan": 7, "rightWoman": 10}]}], "stats": {"maxOpponentRepeat": 2, "maxSharedCourtRepeat": 3, "prefix8MinUniqueSharedCourt": 17, "prefix10MinUniqueSharedCourt": 20}}, "option2": {"rounds": [{"round": 1, "matches": [{"court": 1, "sourceRound": 7, "leftMan": 7, "leftWoman": 1, "rightMan": 11, "rightWoman": 5}, {"court": 2, "sourceRound": 7, "leftMan": 4, "leftWoman": 10, "rightMan": 9, "rightWoman": 3}, {"court": 3, "sourceRound": 7, "leftMan": 2, "leftWoman": 8, "rightMan": 10, "rightWoman": 4}, {"court": 4, "sourceRound": 7, "leftMan": 6, "leftWoman": 12, "rightMan": 8, "rightWoman": 2}, {"court": 5, "sourceRound": 7, "leftMan": 5, "leftWoman": 11, "rightMan": 12, "rightWoman": 6}, {"court": 6, "sourceRound": 7, "leftMan": 1, "leftWoman": 7, "rightMan": 3, "rightWoman": 9}]}, {"round": 2, "matches": [{"court": 1, "sourceRound": 1, "leftMan": 9, "leftWoman": 9, "rightMan": 12, "rightWoman": 12}, {"court": 2, "sourceRound": 1, "leftMan": 2, "leftWoman": 2, "rightMan": 5, "rightWoman": 5}, {"court": 3, "sourceRound": 1, "leftMan": 3, "leftWoman": 3, "rightMan": 11, "rightWoman": 11}, {"court": 4, "sourceRound": 1, "leftMan": 4, "leftWoman": 4, "rightMan": 7, "rightWoman": 7}, {"court": 5, "sourceRound": 1, "leftMan": 8, "leftWoman": 8, "rightMan": 1, "rightWoman": 1}, {"court": 6, "sourceRound": 1, "leftMan": 6, "leftWoman": 6, "rightMan": 10, "rightWoman": 10}]}, {"round": 3, "matches": [{"court": 1, "sourceRound": 6, "leftMan": 10, "leftWoman": 3, "rightMan": 1, "rightWoman": 6}, {"court": 2, "sourceRound": 6, "leftMan": 7, "leftWoman": 12, "rightMan": 6, "rightWoman": 11}, {"court": 3, "sourceRound": 6, "leftMan": 5, "leftWoman": 10, "rightMan": 8, "rightWoman": 1}, {"court": 4, "sourceRound": 6, "leftMan": 12, "leftWoman": 5, "rightMan": 2, "rightWoman": 7}, {"court": 5, "sourceRound": 6, "leftMan": 3, "leftWoman": 8, "rightMan": 4, "rightWoman": 9}, {"court": 6, "sourceRound": 6, "leftMan": 11, "leftWoman": 4, "rightMan": 9, "rightWoman": 2}]}, {"round": 4, "matches": [{"court": 1, "sourceRound": 12, "leftMan": 8, "leftWoman": 7, "rightMan": 9, "rightWoman": 8}, {"court": 2, "sourceRound": 12, "leftMan": 10, "leftWoman": 9, "rightMan": 5, "rightWoman": 4}, {"court": 3, "sourceRound": 12, "leftMan": 3, "leftWoman": 2, "rightMan": 7, "rightWoman": 6}, {"court": 4, "sourceRound": 12, "leftMan": 1, "leftWoman": 12, "rightMan": 11, "rightWoman": 10}, {"court": 5, "sourceRound": 12, "leftMan": 6, "leftWoman": 5, "rightMan": 4, "rightWoman": 3}, {"court": 6, "sourceRound": 12, "leftMan": 12, "leftWoman": 11, "rightMan": 2, "rightWoman": 1}]}, {"round": 5, "matches": [{"court": 1, "sourceRound": 9, "leftMan": 1, "leftWoman": 9, "rightMan": 2, "rightWoman": 10}, {"court": 2, "sourceRound": 9, "leftMan": 6, "leftWoman": 2, "rightMan": 12, "rightWoman": 8}, {"court": 3, "sourceRound": 9, "leftMan": 10, "leftWoman": 6, "rightMan": 4, "rightWoman": 12}, {"court": 4, "sourceRound": 9, "leftMan": 9, "leftWoman": 5, "rightMan": 3, "rightWoman": 11}, {"court": 5, "sourceRound": 9, "leftMan": 11, "leftWoman": 7, "rightMan": 8, "rightWoman": 4}, {"court": 6, "sourceRound": 9, "leftMan": 5, "leftWoman": 1, "rightMan": 7, "rightWoman": 3}]}, {"round": 6, "matches": [{"court": 1, "sourceRound": 2, "leftMan": 12, "leftWoman": 1, "rightMan": 3, "rightWoman": 4}, {"court": 2, "sourceRound": 2, "leftMan": 8, "leftWoman": 9, "rightMan": 10, "rightWoman": 11}, {"court": 3, "sourceRound": 2, "leftMan": 1, "leftWoman": 2, "rightMan": 6, "rightWoman": 7}, {"court": 4, "sourceRound": 2, "leftMan": 2, "leftWoman": 3, "rightMan": 7, "rightWoman": 8}, {"court": 5, "sourceRound": 2, "leftMan": 9, "leftWoman": 10, "rightMan": 5, "rightWoman": 6}, {"court": 6, "sourceRound": 2, "leftMan": 4, "leftWoman": 5, "rightMan": 11, "rightWoman": 12}]}, {"round": 7, "matches": [{"court": 1, "sourceRound": 11, "leftMan": 5, "leftWoman": 3, "rightMan": 6, "rightWoman": 4}, {"court": 2, "sourceRound": 11, "leftMan": 8, "leftWoman": 6, "rightMan": 7, "rightWoman": 5}, {"court": 3, "sourceRound": 11, "leftMan": 1, "leftWoman": 11, "rightMan": 9, "rightWoman": 7}, {"court": 4, "sourceRound": 11, "leftMan": 11, "leftWoman": 9, "rightMan": 4, "rightWoman": 2}, {"court": 5, "sourceRound": 11, "leftMan": 2, "leftWoman": 12, "rightMan": 3, "rightWoman": 1}, {"court": 6, "sourceRound": 11, "leftMan": 10, "leftWoman": 8, "rightMan": 12, "rightWoman": 10}]}, {"round": 8, "matches": [{"court": 1, "sourceRound": 8, "leftMan": 4, "leftWoman": 11, "rightMan": 8, "rightWoman": 3}, {"court": 2, "sourceRound": 8, "leftMan": 11, "leftWoman": 6, "rightMan": 12, "rightWoman": 7}, {"court": 3, "sourceRound": 8, "leftMan": 3, "leftWoman": 10, "rightMan": 2, "rightWoman": 9}, {"court": 4, "sourceRound": 8, "leftMan": 9, "leftWoman": 4, "rightMan": 6, "rightWoman": 1}, {"court": 5, "sourceRound": 8, "leftMan": 7, "leftWoman": 2, "rightMan": 10, "rightWoman": 5}, {"court": 6, "sourceRound": 8, "leftMan": 5, "leftWoman": 12, "rightMan": 1, "rightWoman": 8}]}, {"round": 9, "matches": [{"court": 1, "sourceRound": 4, "leftMan": 7, "leftWoman": 10, "rightMan": 11, "rightWoman": 2}, {"court": 2, "sourceRound": 4, "leftMan": 4, "leftWoman": 7, "rightMan": 10, "rightWoman": 1}, {"court": 3, "sourceRound": 4, "leftMan": 12, "leftWoman": 3, "rightMan": 9, "rightWoman": 12}, {"court": 4, "sourceRound": 4, "leftMan": 3, "leftWoman": 6, "rightMan": 5, "rightWoman": 8}, {"court": 5, "sourceRound": 4, "leftMan": 1, "leftWoman": 4, "rightMan": 8, "rightWoman": 11}, {"court": 6, "sourceRound": 4, "leftMan": 2, "leftWoman": 5, "rightMan": 6, "rightWoman": 9}]}, {"round": 10, "matches": [{"court": 1, "sourceRound": 3, "leftMan": 5, "leftWoman": 7, "rightMan": 10, "rightWoman": 12}, {"court": 2, "sourceRound": 3, "leftMan": 8, "leftWoman": 10, "rightMan": 3, "rightWoman": 5}, {"court": 3, "sourceRound": 3, "leftMan": 11, "leftWoman": 1, "rightMan": 6, "rightWoman": 8}, {"court": 4, "sourceRound": 3, "leftMan": 12, "leftWoman": 2, "rightMan": 1, "rightWoman": 3}, {"court": 5, "sourceRound": 3, "leftMan": 9, "leftWoman": 11, "rightMan": 7, "rightWoman": 9}, {"court": 6, "sourceRound": 3, "leftMan": 2, "leftWoman": 4, "rightMan": 4, "rightWoman": 6}]}, {"round": 11, "matches": [{"court": 1, "sourceRound": 5, "leftMan": 4, "leftWoman": 8, "rightMan": 7, "rightWoman": 11}, {"court": 2, "sourceRound": 5, "leftMan": 11, "leftWoman": 3, "rightMan": 5, "rightWoman": 9}, {"court": 3, "sourceRound": 5, "leftMan": 12, "leftWoman": 4, "rightMan": 1, "rightWoman": 5}, {"court": 4, "sourceRound": 5, "leftMan": 8, "leftWoman": 12, "rightMan": 2, "rightWoman": 6}, {"court": 5, "sourceRound": 5, "leftMan": 3, "leftWoman": 7, "rightMan": 6, "rightWoman": 10}, {"court": 6, "sourceRound": 5, "leftMan": 9, "leftWoman": 1, "rightMan": 10, "rightWoman": 2}]}, {"round": 12, "matches": [{"court": 1, "sourceRound": 10, "leftMan": 2, "leftWoman": 11, "rightMan": 5, "rightWoman": 2}, {"court": 2, "sourceRound": 10, "leftMan": 9, "leftWoman": 6, "rightMan": 11, "rightWoman": 8}, {"court": 3, "sourceRound": 10, "leftMan": 8, "leftWoman": 5, "rightMan": 12, "rightWoman": 9}, {"court": 4, "sourceRound": 10, "leftMan": 4, "leftWoman": 1, "rightMan": 1, "rightWoman": 10}, {"court": 5, "sourceRound": 10, "leftMan": 6, "leftWoman": 3, "rightMan": 10, "rightWoman": 7}, {"court": 6, "sourceRound": 10, "leftMan": 7, "leftWoman": 4, "rightMan": 3, "rightWoman": 12}]}], "stats": {"maxOpponentRepeat": 2, "maxSharedCourtRepeat": 3, "prefix8MinUniqueSharedCourt": 17, "prefix10MinUniqueSharedCourt": 20}}};
+
     function createInputs(containerId, prefix, labelText) {
       const container = document.getElementById(containerId);
       for (let i = 1; i <= 12; i++) {
@@ -388,83 +221,29 @@
       document.getElementById('output').innerHTML = '';
     }
 
-    // Fixed schedule options.
-    // Each pair is [teamAIndex, teamBIndex].
-    const scheduleOption1 = [
-      [[1,2],[3,4],[5,6],[7,8],[9,10],[11,12]],
-      [[1,3],[2,4],[5,7],[6,8],[9,11],[10,12]],
-      [[1,4],[2,3],[5,8],[6,7],[9,12],[10,11]],
-      [[1,5],[2,6],[3,7],[4,8],[9,10],[11,12]],
-      [[1,6],[2,5],[3,8],[4,7],[9,11],[10,12]],
-      [[1,7],[2,8],[3,5],[4,6],[9,12],[10,11]],
-      [[1,8],[2,7],[3,6],[4,5],[9,10],[11,12]],
-      [[1,9],[2,10],[3,11],[4,12],[5,6],[7,8]],
-      [[1,10],[2,9],[3,12],[4,11],[5,7],[6,8]],
-      [[1,11],[2,12],[3,9],[4,10],[5,8],[6,7]],
-      [[1,12],[2,11],[3,10],[4,9],[5,6],[7,8]],
-      [[1,2],[3,4],[5,6],[7,8],[9,10],[11,12]]
-    ];
-
-    const scheduleOption2 = [
-      [[1,4],[2,5],[3,6],[7,10],[8,11],[9,12]],
-      [[1,5],[2,6],[3,4],[7,11],[8,12],[9,10]],
-      [[1,6],[2,4],[3,5],[7,12],[8,10],[9,11]],
-      [[1,7],[2,8],[3,9],[4,10],[5,11],[6,12]],
-      [[1,8],[2,9],[3,7],[4,11],[5,12],[6,10]],
-      [[1,9],[2,7],[3,8],[4,12],[5,10],[6,11]],
-      [[1,10],[2,11],[3,12],[4,7],[5,8],[6,9]],
-      [[1,11],[2,12],[3,10],[4,8],[5,9],[6,7]],
-      [[1,12],[2,10],[3,11],[4,9],[5,7],[6,8]],
-      [[1,3],[2,4],[5,7],[6,8],[9,11],[10,12]],
-      [[1,2],[3,4],[5,8],[6,7],[9,12],[10,11]],
-      [[1,5],[2,3],[4,6],[7,9],[8,10],[11,12]]
-    ];
-
-    function getPattern(optionKey) {
-      return optionKey === 'option2' ? scheduleOption2 : scheduleOption1;
-    }
-
-    function getWomenOrder(optionKey, roundIdx) {
-      if (optionKey === 'option2') {
-        const shift = (roundIdx * 3 + 1) % 12;
-        return Array.from({length: 12}, (_, i) => ((i + shift) % 12) + 1);
-      }
-      return Array.from({length: 12}, (_, i) => ((i + roundIdx) % 12) + 1);
-    }
-
-    function renderRound(round, rIndex, men, women, optionKey) {
-      const womenOrder = getWomenOrder(optionKey, rIndex);
-      const teams = Array.from({length: 12}, (_, i) => ({
-        man: men[i],
-        woman: women[womenOrder[i] - 1]
-      }));
-
+    function renderRound(roundData, men, women) {
       return `
         <section class="round">
-          <h3 class="round-title">Round ${rIndex + 1}</h3>
+          <h3 class="round-title">Round ${roundData.round}</h3>
           <div class="court-grid">
-            ${round.map((match, idx) => {
-              const a = teams[match[0] - 1];
-              const b = teams[match[1] - 1];
-              return `
-                <div class="court-card">
-                  <div class="court-head">Court ${idx + 1}</div>
-                  <div class="court">
-                    <div class="side">
-                      <div class="side-label">Left Side</div>
-                      <div class="team-line">${a.man}</div>
-                      <div class="team-line">${a.woman}</div>
-                    </div>
-                    <div class="net">|</div>
-                    <div class="side">
-                      <div class="side-label">Right Side</div>
-                      <div class="team-line">${b.man}</div>
-                      <div class="team-line">${b.woman}</div>
-                    </div>
+            ${roundData.matches.map(match => `
+              <div class="court-card">
+                <div class="court-head">Court ${match.court}</div>
+                <div class="court">
+                  <div class="side">
+                    <div class="side-label">Left Side</div>
+                    <div class="team-line">${men[match.leftMan - 1]}</div>
+                    <div class="team-line">${women[match.leftWoman - 1]}</div>
+                  </div>
+                  <div class="net">|</div>
+                  <div class="side">
+                    <div class="side-label">Right Side</div>
+                    <div class="team-line">${men[match.rightMan - 1]}</div>
+                    <div class="team-line">${women[match.rightWoman - 1]}</div>
                   </div>
                 </div>
-              `;
-            }).join('')}
+              </div>
+            `).join('')}
           </div>
         </section>
       `;
@@ -478,28 +257,30 @@
         const men = getNames('man');
         const women = getNames('woman');
         const optionKey = document.getElementById('optionSelect').value;
-        const pattern = getPattern(optionKey);
+        const option = OPTIONS[optionKey];
 
         let html = `
           <div class="summary">
             <div class="summary-box"><strong>${optionKey === 'option1' ? 'Option 1' : 'Option 2'}</strong>Fixed schedule pattern</div>
             <div class="summary-box"><strong>Format</strong>Always mixed doubles vs mixed doubles</div>
             <div class="summary-box"><strong>Max rounds</strong>12</div>
-            <div class="summary-box"><strong>Priority window</strong>Balanced feel through rounds 8–10</div>
+            <div class="summary-box"><strong>Opponent cap</strong>${option.stats.maxOpponentRepeat}</div>
+            <div class="summary-box"><strong>Shared-court max</strong>${option.stats.maxSharedCourtRepeat}</div>
+            <div class="summary-box"><strong>Early variety</strong>At least ${option.stats.prefix8MinUniqueSharedCourt} unique shared-court players by round 8 for every player</div>
           </div>
         `;
 
-        pattern.forEach((round, rIndex) => {
-          html += renderRound(round, rIndex, men, women, optionKey);
+        option.rounds.forEach(round => {
+          html += renderRound(round, men, women);
         });
 
         html += `
           <section class="card" style="margin-top:18px;">
             <h3>Helpful note</h3>
             <div class="note">
-              This app uses two fixed schedule options and keeps every team mixed doubles only.
-              In a format like this, perfect equality for every player-to-player opponent combination is not possible,
-              especially if the group stops early. These options are arranged to keep the first 8–10 rounds as varied and usable as possible while still allowing 12 rounds total.
+              In both options, no player faces any specific other player more than 2 times.
+              By round 10, every player has shared a court with at least 20 of the other 23 players in these fixed schedules.
+              Full shared-court coverage with all 23 others is not possible by round 10, but these options push variety hard in the first 8–10 rounds.
             </div>
           </section>
         `;
