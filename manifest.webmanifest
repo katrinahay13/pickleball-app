@@ -1,0 +1,16 @@
+{
+  "name": "6-Court Mixed Doubles Round Robin",
+  "short_name": "6-Court Mixed",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fff7d6",
+  "theme_color": "#f7c948",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

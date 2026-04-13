@@ -1,675 +1,520 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Pickleball Mixer">
-<link rel="apple-touch-icon" href="icon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pickleball 8-Player Mixer</title>
+  <title>6-Court Mixed Doubles Round Robin</title>
+
+  <meta name="theme-color" content="#f7c948" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="6-Court Mixed Doubles Round Robin">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon.svg">
+
   <style>
-    :root {
-      --bg: #f7f9fc;
-      --card: #ffffff;
-      --text: #1a2433;
-      --muted: #5f6f85;
-      --line: #d7deea;
-      --accent: #006d77;
-      --accent-2: #83c5be;
-      --danger: #c62828;
-      --ok: #2e7d32;
-      --radius: 14px;
-      --shadow: 0 8px 24px rgba(19, 35, 60, 0.08);
+    :root{
+      --bg:#fff7d6;
+      --card:#ffffff;
+      --card2:#fffdf5;
+      --line:#ecdca6;
+      --text:#243447;
+      --muted:#66758a;
+      --accent:#ef8354;
+      --accent-dark:#dc6f41;
+      --soft:#6c757d;
+      --yellow:#f7c948;
+      --teal:#2a9d8f;
+      --shadow:0 8px 24px rgba(0,0,0,.08);
+      --radius:18px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-      color: var(--text);
+    * { box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(circle at top right, #d6f2ef 0, transparent 35%),
-        radial-gradient(circle at bottom left, #e3ecff 0, transparent 40%),
-        var(--bg);
-      min-height: 100vh;
+        radial-gradient(circle at top left, #fffbe7 0%, #fff2bf 32%, #fff7d6 60%, #fffaf0 100%);
     }
 
-    .app {
-      width: min(1100px, 96vw);
-      margin: 20px auto 32px;
-      display: grid;
-      gap: 16px;
+    .wrap{
+      max-width:1220px;
+      margin:0 auto;
+      padding:18px 14px 40px;
     }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 16px;
+    .hero{
+      background:linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,248,214,.88));
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:20px;
+      position:relative;
+      overflow:hidden;
     }
 
-    h1, h2 {
-      margin: 0 0 12px;
-      line-height: 1.2;
+    .hero:after{
+      content:"";
+      position:absolute;
+      right:-30px;
+      top:-25px;
+      width:130px;
+      height:130px;
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #fff7b5 0%, #f7c948 58%, #e9b42a 100%);
+      opacity:.7;
     }
 
-    h1 {
-      font-size: clamp(1.25rem, 2.6vw, 1.9rem);
+    h1{
+      margin:0 0 8px;
+      font-size:clamp(1.7rem, 3vw, 2.4rem);
+      line-height:1.06;
+      position:relative;
+      z-index:1;
     }
 
-    h2 {
-      font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+    .sub{
+      margin:0;
+      color:var(--muted);
+      line-height:1.5;
+      max-width:840px;
+      position:relative;
+      z-index:1;
     }
 
-    .sub {
-      color: var(--muted);
-      margin: 0 0 12px;
-      font-size: 0.94rem;
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+      position:relative;
+      z-index:1;
     }
 
-    .players-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(140px, 1fr));
-      gap: 10px;
+    .pill{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.85);
+      border-radius:999px;
+      padding:9px 13px;
+      font-size:.93rem;
+      font-weight:700;
     }
 
-    .players-grid input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      font-size: 0.95rem;
-      background: #fff;
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin-top:16px;
     }
 
-    .controls {
-      margin-top: 12px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
+    .card{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:16px;
     }
 
-    button {
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
+    h2, h3{
+      margin:0 0 12px;
     }
 
-    button.secondary {
-      background: #50627b;
+    .inputs{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
     }
 
-    button.ghost {
-      background: #e9eef7;
-      color: var(--text);
-      border: 1px solid var(--line);
+    .player-field{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
     }
 
-    .status {
-      margin-top: 10px;
-      font-size: 0.92rem;
-      color: var(--muted);
+    .player-field label{
+      font-size:.86rem;
+      color:var(--muted);
+      font-weight:700;
     }
 
-    .status.err {
-      color: var(--danger);
-      font-weight: 700;
+    input{
+      width:100%;
+      padding:11px 12px;
+      border:1px solid #d8d8d8;
+      border-radius:12px;
+      font:inherit;
+      background:#fff;
     }
 
-    .status.ok {
-      color: var(--ok);
-      font-weight: 700;
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin-top:16px;
     }
 
-    .schedule {
-      display: grid;
-      gap: 10px;
+    select{
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid #d8d8d8;
+      background:#fff;
+      font:inherit;
+      min-width:240px;
     }
 
-    .match {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 10px;
-      background: #fcfdff;
-      display: grid;
-      gap: 8px;
+    button{
+      padding:12px 16px;
+      border:none;
+      border-radius:12px;
+      background:linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(239,131,84,.24);
     }
 
-    .match-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: baseline;
-      color: var(--muted);
-      font-size: 0.92rem;
+    button.secondary{
+      background:linear-gradient(135deg, #7c8791, #626d76);
+      box-shadow:none;
     }
 
-    .teams {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.95rem;
-      font-weight: 700;
+    .note{
+      color:var(--muted);
+      font-size:.95rem;
+      line-height:1.5;
+      margin-top:12px;
     }
 
-    .vs {
-      color: var(--muted);
-      font-weight: 700;
-      text-align: center;
+    .summary{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));
+      gap:12px;
+      margin-top:16px;
     }
 
-    .scores {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 8px;
+    .summary-box{
+      background:rgba(255,255,255,.9);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px;
     }
 
-    .scores input {
-      width: 100%;
-      min-width: 58px;
-      text-align: center;
-      padding: 8px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.96rem;
-      background: #fff;
+    .summary-box strong{
+      display:block;
+      margin-bottom:4px;
     }
 
-    .rank-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    .round{
+      margin-top:18px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.92rem;
+    .round-title{
+      margin:0 0 10px;
+      font-size:1.15rem;
     }
 
-    th, td {
-      border-bottom: 1px solid var(--line);
-      padding: 7px 6px;
-      text-align: left;
-      white-space: nowrap;
+    .court-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(310px, 1fr));
+      gap:14px;
     }
 
-    th {
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 0.82rem;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
+    .court-card{
+      background:var(--card2);
+      border:1px solid var(--line);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
     }
 
-    td.num {
-      text-align: right;
-      font-variant-numeric: tabular-nums;
+    .court-head{
+      padding:11px 14px;
+      font-weight:800;
+      background:linear-gradient(135deg, rgba(247,201,72,.34), rgba(42,157,143,.10));
+      border-bottom:1px solid var(--line);
     }
 
-    .footer-note {
-      color: var(--muted);
-      font-size: 0.85rem;
+    .court{
+      display:grid;
+      grid-template-columns:1fr 18px 1fr;
+      align-items:stretch;
+      min-height:126px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.84) 0%, rgba(255,255,255,.84) 49%, rgba(230, 214, 165, .7) 49%, rgba(230, 214, 165, .7) 51%, rgba(255,255,255,.84) 51%, rgba(255,255,255,.84) 100%);
     }
 
-    @media (max-width: 850px) {
-      .players-grid {
-        grid-template-columns: repeat(2, minmax(120px, 1fr));
-      }
-
-      .rank-wrap {
-        grid-template-columns: 1fr;
-      }
+    .side{
+      padding:14px 14px 12px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:8px;
     }
 
-    @media (max-width: 540px) {
-      .app {
-        width: min(100vw, 100%);
-        margin: 0;
-        padding: 10px;
-      }
+    .side-label{
+      font-size:.84rem;
+      color:var(--muted);
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
 
-      .card {
-        border-radius: 12px;
-        padding: 12px;
-      }
+    .team-line{
+      font-weight:800;
+      line-height:1.3;
+    }
 
-      .teams, .scores {
-        grid-template-columns: 1fr;
-        gap: 6px;
-        text-align: center;
-      }
+    .net{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#8a7e58;
+      font-weight:800;
+      font-size:.9rem;
+    }
 
-      .vs {
-        display: none;
-      }
+    .error{
+      margin-top:16px;
+      background:#fff0ef;
+      border:1px solid #efc0bb;
+      color:#8b2a21;
+      border-radius:16px;
+      padding:14px;
+      font-weight:700;
+    }
 
-      th, td {
-        font-size: 0.86rem;
-      }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns:1fr; }
+      .inputs{ grid-template-columns:1fr; }
+      .court-grid{ grid-template-columns:1fr; }
+      .controls{ align-items:stretch; }
+      select, button{ width:100%; }
     }
   </style>
 </head>
 <body>
-  <main class="app">
-    <section class="card">
-      <h1>8-Player Pickleball Round-Robin Mixer</h1>
-      <p class="sub">Enter 8 players, generate a fair 7-round doubles mixer, add match scores, and track standings offline.</p>
+  <div class="wrap">
+    <section class="hero">
+      <h1>6-Court Mixed Doubles Round Robin</h1>
+      <p class="sub">
+        Enter 12 men and 12 women, then choose one of the two fixed schedule options.
+        Teams are always one man and one woman versus one man and one woman.
+        The first 8–10 rounds are the priority window for balance, while still keeping 12-round capability.
+      </p>
+      <div class="pill-row">
+        <div class="pill">24 players</div>
+        <div class="pill">6 courts</div>
+        <div class="pill">Mixed doubles only</div>
+        <div class="pill">2 fixed options</div>
+        <div class="pill">Easy court-by-court display</div>
+      </div>
+    </section>
 
-      <div class="players-grid" id="playerInputs"></div>
+    <div class="grid">
+      <section class="card">
+        <h2>Men</h2>
+        <div id="menInputs" class="inputs"></div>
+      </section>
 
+      <section class="card">
+        <h2>Women</h2>
+        <div id="womenInputs" class="inputs"></div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:16px;">
       <div class="controls">
-        <label><input type="checkbox" id="randomizeNames" checked /> Randomize player positions each generation</label>
+        <select id="optionSelect">
+          <option value="option1">Schedule Option 1</option>
+          <option value="option2">Schedule Option 2</option>
+        </select>
+        <button onclick="buildSchedule()">Build Schedule</button>
+        <button onclick="clearNames()" class="secondary">Clear Player Names</button>
       </div>
-
-      <div class="controls">
-        <button id="generateBtn">Generate 7-Round Schedule</button>
-        <button id="clearScoresBtn" class="secondary">Clear Scores</button>
-        <button id="resetAllBtn" class="ghost">Reset Everything</button>
+      <div class="note">
+        These are two fixed schedule patterns. They are designed to stay readable and reasonably balanced if your group stops after 8, 9, or 10 rounds, while still allowing all 12 rounds.
       </div>
-
-      <div class="status" id="status"></div>
     </section>
 
-    <section class="card">
-      <h2>Schedule (2 Courts x 7 Rounds)</h2>
-      <div class="schedule" id="schedule"></div>
-    </section>
-
-    <section class="card">
-      <h2>Final Rankings</h2>
-      <div class="rank-wrap">
-        <div>
-          <h3>Ranked by Wins</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>#</th><th>Player</th><th class="num">W</th><th class="num">PF</th><th class="num">PA</th><th class="num">Diff</th>
-              </tr>
-            </thead>
-            <tbody id="winsTable"></tbody>
-          </table>
-        </div>
-
-        <div>
-          <h3>Ranked by Points</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>#</th><th>Player</th><th class="num">PF</th><th class="num">PA</th><th class="num">Diff</th><th class="num">W</th>
-              </tr>
-            </thead>
-            <tbody id="pointsTable"></tbody>
-          </table>
-        </div>
-      </div>
-      <p class="footer-note">Ranking ties are broken by differential, then points for (wins table) or wins (points table).</p>
-    </section>
-  </main>
+    <div id="output"></div>
+  </div>
 
   <script>
-    (function () {
-      const STORAGE_KEY = "pickleball_mixer_8p_v1";
-      const PLAYER_COUNT = 8;
+    function createInputs(containerId, prefix, labelText) {
+      const container = document.getElementById(containerId);
+      for (let i = 1; i <= 12; i++) {
+        const wrap = document.createElement('div');
+        wrap.className = 'player-field';
 
-      // Fixed fair doubles pattern for 8 players (indices 0-7).
-      const TEMPLATE = [
-        // Round 1
-        [[0, 1], [2, 3], [4, 5], [6, 7]],
-        // Round 2
-        [[0, 2], [4, 6], [1, 3], [5, 7]],
-        // Round 3
-        [[0, 3], [5, 6], [1, 2], [4, 7]],
-        // Round 4
-        [[0, 4], [1, 5], [2, 6], [3, 7]],
-        // Round 5
-        [[0, 5], [2, 7], [1, 4], [3, 6]],
-        // Round 6
-        [[0, 6], [3, 5], [1, 7], [2, 4]],
-        // Round 7
-        [[0, 7], [1, 6], [2, 5], [3, 4]]
-      ];
+        const label = document.createElement('label');
+        label.setAttribute('for', `${prefix}_${i}`);
+        label.textContent = `${labelText} ${i}`;
 
-      const els = {
-        playerInputs: document.getElementById("playerInputs"),
-        randomizeNames: document.getElementById("randomizeNames"),
-        generateBtn: document.getElementById("generateBtn"),
-        clearScoresBtn: document.getElementById("clearScoresBtn"),
-        resetAllBtn: document.getElementById("resetAllBtn"),
-        schedule: document.getElementById("schedule"),
-        winsTable: document.getElementById("winsTable"),
-        pointsTable: document.getElementById("pointsTable"),
-        status: document.getElementById("status")
-      };
+        const input = document.createElement('input');
+        input.id = `${prefix}_${i}`;
+        input.placeholder = `${labelText} ${i}`;
 
-      const state = {
-        names: Array.from({ length: PLAYER_COUNT }, (_, i) => `Player ${i + 1}`),
-        schedule: [],
-        scores: {}
-      };
-
-      function initInputs() {
-        els.playerInputs.innerHTML = "";
-        for (let i = 0; i < PLAYER_COUNT; i += 1) {
-          const input = document.createElement("input");
-          input.type = "text";
-          input.placeholder = `Player ${i + 1}`;
-          input.value = state.names[i] || "";
-          input.dataset.index = String(i);
-          input.addEventListener("input", (e) => {
-            state.names[i] = e.target.value;
-            persist();
-            renderRankings();
-            rerenderScheduleNamesOnly();
-          });
-          els.playerInputs.appendChild(input);
-        }
+        wrap.appendChild(label);
+        wrap.appendChild(input);
+        container.appendChild(wrap);
       }
+    }
 
-      function setStatus(message, type) {
-        els.status.textContent = message || "";
-        els.status.className = "status" + (type ? ` ${type}` : "");
+    createInputs('menInputs', 'man', 'Man');
+    createInputs('womenInputs', 'woman', 'Woman');
+
+    function getNames(prefix) {
+      const names = [];
+      for (let i = 1; i <= 12; i++) {
+        const value = document.getElementById(`${prefix}_${i}`).value.trim();
+        if (!value) throw new Error(`Please fill in all ${prefix === 'man' ? 'men' : 'women'} names.`);
+        names.push(value);
       }
-
-      function shuffle(arr) {
-        const a = arr.slice();
-        for (let i = a.length - 1; i > 0; i -= 1) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [a[i], a[j]] = [a[j], a[i]];
-        }
-        return a;
+      const dedup = new Set(names.map(n => n.toLowerCase()));
+      if (dedup.size !== names.length) {
+        throw new Error(`${prefix === 'man' ? 'Men' : 'Women'} names must be unique.`);
       }
+      return names;
+    }
 
-      function normalizeNames() {
-        const trimmed = state.names.map((n, i) => {
-          const val = (n || "").trim();
-          return val || `Player ${i + 1}`;
+    function clearNames() {
+      for (let i = 1; i <= 12; i++) {
+        document.getElementById(`man_${i}`).value = '';
+        document.getElementById(`woman_${i}`).value = '';
+      }
+      document.getElementById('output').innerHTML = '';
+    }
+
+    // Fixed schedule options.
+    // Each pair is [teamAIndex, teamBIndex].
+    const scheduleOption1 = [
+      [[1,2],[3,4],[5,6],[7,8],[9,10],[11,12]],
+      [[1,3],[2,4],[5,7],[6,8],[9,11],[10,12]],
+      [[1,4],[2,3],[5,8],[6,7],[9,12],[10,11]],
+      [[1,5],[2,6],[3,7],[4,8],[9,10],[11,12]],
+      [[1,6],[2,5],[3,8],[4,7],[9,11],[10,12]],
+      [[1,7],[2,8],[3,5],[4,6],[9,12],[10,11]],
+      [[1,8],[2,7],[3,6],[4,5],[9,10],[11,12]],
+      [[1,9],[2,10],[3,11],[4,12],[5,6],[7,8]],
+      [[1,10],[2,9],[3,12],[4,11],[5,7],[6,8]],
+      [[1,11],[2,12],[3,9],[4,10],[5,8],[6,7]],
+      [[1,12],[2,11],[3,10],[4,9],[5,6],[7,8]],
+      [[1,2],[3,4],[5,6],[7,8],[9,10],[11,12]]
+    ];
+
+    const scheduleOption2 = [
+      [[1,4],[2,5],[3,6],[7,10],[8,11],[9,12]],
+      [[1,5],[2,6],[3,4],[7,11],[8,12],[9,10]],
+      [[1,6],[2,4],[3,5],[7,12],[8,10],[9,11]],
+      [[1,7],[2,8],[3,9],[4,10],[5,11],[6,12]],
+      [[1,8],[2,9],[3,7],[4,11],[5,12],[6,10]],
+      [[1,9],[2,7],[3,8],[4,12],[5,10],[6,11]],
+      [[1,10],[2,11],[3,12],[4,7],[5,8],[6,9]],
+      [[1,11],[2,12],[3,10],[4,8],[5,9],[6,7]],
+      [[1,12],[2,10],[3,11],[4,9],[5,7],[6,8]],
+      [[1,3],[2,4],[5,7],[6,8],[9,11],[10,12]],
+      [[1,2],[3,4],[5,8],[6,7],[9,12],[10,11]],
+      [[1,5],[2,3],[4,6],[7,9],[8,10],[11,12]]
+    ];
+
+    function getPattern(optionKey) {
+      return optionKey === 'option2' ? scheduleOption2 : scheduleOption1;
+    }
+
+    function getWomenOrder(optionKey, roundIdx) {
+      if (optionKey === 'option2') {
+        const shift = (roundIdx * 3 + 1) % 12;
+        return Array.from({length: 12}, (_, i) => ((i + shift) % 12) + 1);
+      }
+      return Array.from({length: 12}, (_, i) => ((i + roundIdx) % 12) + 1);
+    }
+
+    function renderRound(round, rIndex, men, women, optionKey) {
+      const womenOrder = getWomenOrder(optionKey, rIndex);
+      const teams = Array.from({length: 12}, (_, i) => ({
+        man: men[i],
+        woman: women[womenOrder[i] - 1]
+      }));
+
+      return `
+        <section class="round">
+          <h3 class="round-title">Round ${rIndex + 1}</h3>
+          <div class="court-grid">
+            ${round.map((match, idx) => {
+              const a = teams[match[0] - 1];
+              const b = teams[match[1] - 1];
+              return `
+                <div class="court-card">
+                  <div class="court-head">Court ${idx + 1}</div>
+                  <div class="court">
+                    <div class="side">
+                      <div class="side-label">Left Side</div>
+                      <div class="team-line">${a.man}</div>
+                      <div class="team-line">${a.woman}</div>
+                    </div>
+                    <div class="net">|</div>
+                    <div class="side">
+                      <div class="side-label">Right Side</div>
+                      <div class="team-line">${b.man}</div>
+                      <div class="team-line">${b.woman}</div>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </section>
+      `;
+    }
+
+    function buildSchedule() {
+      const output = document.getElementById('output');
+      output.innerHTML = '';
+
+      try {
+        const men = getNames('man');
+        const women = getNames('woman');
+        const optionKey = document.getElementById('optionSelect').value;
+        const pattern = getPattern(optionKey);
+
+        let html = `
+          <div class="summary">
+            <div class="summary-box"><strong>${optionKey === 'option1' ? 'Option 1' : 'Option 2'}</strong>Fixed schedule pattern</div>
+            <div class="summary-box"><strong>Format</strong>Always mixed doubles vs mixed doubles</div>
+            <div class="summary-box"><strong>Max rounds</strong>12</div>
+            <div class="summary-box"><strong>Priority window</strong>Balanced feel through rounds 8–10</div>
+          </div>
+        `;
+
+        pattern.forEach((round, rIndex) => {
+          html += renderRound(round, rIndex, men, women, optionKey);
         });
 
-        if (trimmed.length !== PLAYER_COUNT) return null;
+        html += `
+          <section class="card" style="margin-top:18px;">
+            <h3>Helpful note</h3>
+            <div class="note">
+              This app uses two fixed schedule options and keeps every team mixed doubles only.
+              In a format like this, perfect equality for every player-to-player opponent combination is not possible,
+              especially if the group stops early. These options are arranged to keep the first 8–10 rounds as varied and usable as possible while still allowing 12 rounds total.
+            </div>
+          </section>
+        `;
 
-        const uniq = new Set(trimmed.map((n) => n.toLowerCase()));
-        if (uniq.size !== PLAYER_COUNT) {
-          setStatus("Player names must be unique (case-insensitive).", "err");
-          return null;
-        }
-
-        state.names = trimmed;
-        return trimmed;
+        output.innerHTML = html;
+      } catch (err) {
+        output.innerHTML = `<div class="error">${err.message}</div>`;
       }
+    }
 
-      function buildSchedule() {
-        const names = normalizeNames();
-        if (!names) return;
-
-        const mapping = els.randomizeNames.checked
-          ? shuffle([...Array(PLAYER_COUNT).keys()])
-          : [...Array(PLAYER_COUNT).keys()];
-
-        const schedule = [];
-        let idCounter = 1;
-
-        TEMPLATE.forEach((round, rIndex) => {
-          for (let court = 0; court < 2; court += 1) {
-            const pairA = round[court * 2];
-            const pairB = round[court * 2 + 1];
-            schedule.push({
-              id: `m${idCounter++}`,
-              round: rIndex + 1,
-              court: court + 1,
-              teamA: [mapping[pairA[0]], mapping[pairA[1]]],
-              teamB: [mapping[pairB[0]], mapping[pairB[1]]]
-            });
-          }
-        });
-
-        state.schedule = schedule;
-        state.scores = {};
-        persist();
-        renderSchedule();
-        renderRankings();
-        setStatus("Schedule generated. Enter scores as points for each team.", "ok");
-      }
-
-      function createScoreInput(matchId, side, value) {
-        const input = document.createElement("input");
-        input.type = "number";
-        input.min = "0";
-        input.step = "1";
-        input.inputMode = "numeric";
-        input.placeholder = side === "a" ? "Team A pts" : "Team B pts";
-        input.value = Number.isFinite(value) ? value : "";
-        input.dataset.matchId = matchId;
-        input.dataset.side = side;
-        input.addEventListener("input", onScoreInput);
-        return input;
-      }
-
-      function onScoreInput(e) {
-        const matchId = e.target.dataset.matchId;
-        const side = e.target.dataset.side;
-        const raw = e.target.value;
-
-        if (!state.scores[matchId]) state.scores[matchId] = { a: null, b: null };
-
-        if (raw === "") {
-          state.scores[matchId][side] = null;
-        } else {
-          const parsed = parseInt(raw, 10);
-          state.scores[matchId][side] = Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
-        }
-
-        if (state.scores[matchId].a == null && state.scores[matchId].b == null) {
-          delete state.scores[matchId];
-        }
-
-        persist();
-        renderRankings();
-      }
-
-      function teamLabel(ids) {
-        return `${state.names[ids[0]]} & ${state.names[ids[1]]}`;
-      }
-
-      function renderSchedule() {
-        els.schedule.innerHTML = "";
-
-        if (!state.schedule.length) {
-          const empty = document.createElement("p");
-          empty.className = "sub";
-          empty.textContent = "No schedule yet. Enter names and click Generate 7-Round Schedule.";
-          els.schedule.appendChild(empty);
-          return;
-        }
-
-        state.schedule.forEach((match) => {
-          const box = document.createElement("article");
-          box.className = "match";
-
-          const head = document.createElement("div");
-          head.className = "match-head";
-          head.innerHTML = `<strong>Round ${match.round}</strong><span>Court ${match.court}</span>`;
-
-          const teams = document.createElement("div");
-          teams.className = "teams";
-          teams.innerHTML = `<div>${teamLabel(match.teamA)}</div><div class="vs">vs</div><div>${teamLabel(match.teamB)}</div>`;
-
-          const scoreWrap = document.createElement("div");
-          scoreWrap.className = "scores";
-          const saved = state.scores[match.id] || { a: null, b: null };
-          scoreWrap.appendChild(createScoreInput(match.id, "a", saved.a));
-
-          const dash = document.createElement("div");
-          dash.className = "vs";
-          dash.textContent = "-";
-          scoreWrap.appendChild(dash);
-
-          scoreWrap.appendChild(createScoreInput(match.id, "b", saved.b));
-
-          box.append(head, teams, scoreWrap);
-          els.schedule.appendChild(box);
-        });
-      }
-
-      function rerenderScheduleNamesOnly() {
-        if (!state.schedule.length) return;
-        const matchCards = els.schedule.querySelectorAll(".match");
-        matchCards.forEach((card, index) => {
-          const match = state.schedule[index];
-          const teams = card.querySelector(".teams");
-          if (teams) {
-            teams.innerHTML = `<div>${teamLabel(match.teamA)}</div><div class="vs">vs</div><div>${teamLabel(match.teamB)}</div>`;
-          }
-        });
-      }
-
-      function computeStats() {
-        const stats = state.names.map((name, idx) => ({
-          idx,
-          name,
-          wins: 0,
-          pf: 0,
-          pa: 0,
-          diff: 0
-        }));
-
-        state.schedule.forEach((match) => {
-          const score = state.scores[match.id];
-          if (!score) return;
-          if (!Number.isFinite(score.a) || !Number.isFinite(score.b)) return;
-
-          match.teamA.forEach((pid) => {
-            stats[pid].pf += score.a;
-            stats[pid].pa += score.b;
-          });
-
-          match.teamB.forEach((pid) => {
-            stats[pid].pf += score.b;
-            stats[pid].pa += score.a;
-          });
-
-          if (score.a > score.b) {
-            match.teamA.forEach((pid) => { stats[pid].wins += 1; });
-          } else if (score.b > score.a) {
-            match.teamB.forEach((pid) => { stats[pid].wins += 1; });
-          }
-        });
-
-        stats.forEach((s) => {
-          s.diff = s.pf - s.pa;
-        });
-
-        return stats;
-      }
-
-      function renderTable(tbody, rows, cols) {
-        tbody.innerHTML = "";
-        rows.forEach((row, i) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = cols
-            .map((c) => {
-              const value = c === "rank" ? i + 1 : row[c];
-              const numClass = typeof value === "number" ? "num" : "";
-              return `<td class="${numClass}">${value}</td>`;
-            })
-            .join("");
-          tbody.appendChild(tr);
-        });
-      }
-
-      function renderRankings() {
-        const stats = computeStats();
-
-        const byWins = stats.slice().sort((a, b) =>
-          b.wins - a.wins || b.diff - a.diff || b.pf - a.pf || a.name.localeCompare(b.name)
-        );
-
-        const byPoints = stats.slice().sort((a, b) =>
-          b.pf - a.pf || b.diff - a.diff || b.wins - a.wins || a.name.localeCompare(b.name)
-        );
-
-        renderTable(els.winsTable, byWins, ["rank", "name", "wins", "pf", "pa", "diff"]);
-        renderTable(els.pointsTable, byPoints, ["rank", "name", "pf", "pa", "diff", "wins"]);
-      }
-
-      function clearScores() {
-        state.scores = {};
-        persist();
-        renderSchedule();
-        renderRankings();
-        setStatus("All scores cleared.", "ok");
-      }
-
-      function resetAll() {
-        state.names = Array.from({ length: PLAYER_COUNT }, (_, i) => `Player ${i + 1}`);
-        state.schedule = [];
-        state.scores = {};
-        persist();
-        initInputs();
-        renderSchedule();
-        renderRankings();
-        setStatus("Reset complete.", "ok");
-      }
-
-      function persist() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          names: state.names,
-          schedule: state.schedule,
-          scores: state.scores,
-          randomize: els.randomizeNames.checked
-        }));
-      }
-
-      function restore() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY);
-          if (!raw) return;
-          const saved = JSON.parse(raw);
-          if (Array.isArray(saved.names) && saved.names.length === PLAYER_COUNT) {
-            state.names = saved.names;
-          }
-          if (Array.isArray(saved.schedule)) {
-            state.schedule = saved.schedule;
-          }
-          if (saved.scores && typeof saved.scores === "object") {
-            state.scores = saved.scores;
-          }
-          if (typeof saved.randomize === "boolean") {
-            els.randomizeNames.checked = saved.randomize;
-          }
-        } catch (err) {
-          console.warn("Could not restore from localStorage", err);
-        }
-      }
-
-      function wire() {
-        els.generateBtn.addEventListener("click", buildSchedule);
-        els.clearScoresBtn.addEventListener("click", clearScores);
-        els.resetAllBtn.addEventListener("click", resetAll);
-        els.randomizeNames.addEventListener("change", persist);
-      }
-
-      restore();
-      initInputs();
-      wire();
-      renderSchedule();
-      renderRankings();
-      setStatus(state.schedule.length ? "Loaded saved schedule from this browser." : "");
-    })();
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>
